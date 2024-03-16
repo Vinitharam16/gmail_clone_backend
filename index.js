@@ -10,12 +10,11 @@ const HTTP_SERVER = express();
 HTTP_SERVER.use(express.urlencoded({ extended: true }));
 HTTP_SERVER.use(express.json({ extended: true }))
 
-//connecting with mongodb database
-connectToDatabase();
 
 var whitelist = [
   "http://127.0.0.1:5500",
   undefined,
+  "https://gmail-clone-backend-o2y5.onrender.com/",
 
 ];
 var corsOptions = {
@@ -30,6 +29,12 @@ var corsOptions = {
 
 //enabling cors
 HTTP_SERVER.use(CORS(corsOptions));
+
+//configuring dotenv package
+require("dotenv").config();
+
+//connecting with mongodb database
+connectToDatabase();
 
 
 // Defining A Port and listening to port with express server
