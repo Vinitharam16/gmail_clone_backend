@@ -11,6 +11,7 @@ HTTP_SERVER.use(express.urlencoded({ extended: true }));
 HTTP_SERVER.use(express.json({ extended: true }))
 
 
+
 //enabling cors
 HTTP_SERVER.use(CORS());
 
