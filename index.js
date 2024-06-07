@@ -14,6 +14,7 @@ HTTP_SERVER.use(express.json({ extended: true }))
 
 //enabling cors
 HTTP_SERVER.use(CORS());
+HTTP_SERVER.options('*', CORS());
 
 //configuring dotenv package
 require("dotenv").config();
