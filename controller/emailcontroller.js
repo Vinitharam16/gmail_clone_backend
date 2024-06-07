@@ -1,7 +1,27 @@
 const Email = require("../models/email");
 const nodemailer = require('nodemailer');
+const Authmodel = require('../models/User');
 const dotenv = require('dotenv');
 dotenv.config();
+
+const GET_ALL_MAILS = async (req, res, next) => {
+    try {
+        const { mails } = await Authmodel.findOne({ _id: req.user })
+        .select('mails')
+        .populate('mails.inbox mails.sent mails.drafts mail.trash');
+        return res.status(200).json({
+            success: true,
+            message: 'All mails fetched successfully',
+            data: mails
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+        })
+    }
+}
+
 
 const tranporter = nodemailer.createTransport({
     service: "Gmail",
@@ -43,7 +63,7 @@ const saveSentEmails = async (req, res) => {
 
 }
 
-const getsendMails = async (req,res) => {
+const getsendMails = async (req, res) => {
     try {
         let emails = await Email.find();
         res.status(200).send(emails);
@@ -61,8 +81,8 @@ const getEmails = async (req, res) => {
             emails = await Email.find({ bin: true });
         } else if (req.params.type === 'allmail') {
             emails = await Email.find({});
-        } else if(req.params.type === 'starred') {
-            emails = await Email.find({ starred: true, bin: false})
+        } else if (req.params.type === 'starred') {
+            emails = await Email.find({ starred: true, bin: false })
         } else {
             emails = await Email.find({ type: req.params.type })
         }
@@ -89,7 +109,7 @@ const moveEmailsToBin = async (req, res) => {
 
 const toggleStarredEmails = async (req, res) => {
     try {
-        await Email.updateOne({_id: req.body.id}, { $set: { starred: req.body.value }})
+        await Email.updateOne({ _id: req.body.id }, { $set: { starred: req.body.value } })
         return res.status(200).json("email is starred mark");
     } catch (error) {
         console.log(err);
@@ -99,7 +119,7 @@ const toggleStarredEmails = async (req, res) => {
 
 const deleteEmails = async (req, res) => {
     try {
-        await Email.deleteMany({ _id: { $in: req.body}});
+        await Email.deleteMany({ _id: { $in: req.body } });
         return res.status(200).json("email is deleted successfully");
     } catch (error) {
         console.log(err);

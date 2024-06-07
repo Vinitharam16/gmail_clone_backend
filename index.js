@@ -30,5 +30,6 @@ HTTP_SERVER.listen(PORT, process.env.NODE_HOSTNAME, () => {
 
 //enabling routes
 HTTP_SERVER.use("/", require('./routes/route'));
+HTTP_SERVER.use('/auth', require('./routes/Authrouter'));
 
 
