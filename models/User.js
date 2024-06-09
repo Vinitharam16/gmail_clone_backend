@@ -42,6 +42,10 @@ const AuthSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'emails'
         }],
+        starred: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'emails'
+        }],
     },
     roles: {
         type: Array,

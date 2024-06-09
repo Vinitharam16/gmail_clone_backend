@@ -12,7 +12,7 @@ AuthRouter.post('/signin', LOGIN_USER);
 
 AuthRouter.get('/list', TokenShield, AuthorizationShield, GET_ALL_USERS);
 
-AuthRouter.get('/:userId',TokenShield, AuthorizationShield, GET_USER_BYID);
+AuthRouter.get('/user',TokenShield, GET_USER_BYID);
 
 module.exports = AuthRouter;
 

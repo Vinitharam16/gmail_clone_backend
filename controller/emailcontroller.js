@@ -45,6 +45,7 @@ const saveSentEmails = async (req, res) => {
             subject: email.subject,
             text: email.body,
         };
+        console.log(email, mailOptions);
 
         tranporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -53,9 +54,21 @@ const saveSentEmails = async (req, res) => {
                 console.log("Email sent: ", info.response);
             }
         });
-        email.save();
+        const savedemail = email.save();
 
-        res.status(200).json('email saved successfully');
+        res.status(200).json({
+            success: true,
+            message: 'Email saved successfully',
+            data: savedemail
+        });
+
+        //get user and update email to its sentbox
+
+        const user = await Authmodel.findOne({ _id: req.user });
+        console.log(req)
+        user.mails.sent.push(savedemail._id)
+        await user.save();
+
     } catch (error) {
         console.log(error);
         res.status(500).json(error.message);
@@ -134,5 +147,6 @@ module.exports = {
     getEmails,
     moveEmailsToBin,
     toggleStarredEmails,
-    deleteEmails
+    deleteEmails,
+    GET_ALL_MAILS,
 }

@@ -15,6 +15,7 @@ function TokenShield(req, res, next) {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
       if (decodedToken) {
         req.headers.decodedToken = decodedToken;
+        req.user = decodedToken.id;
         next();
       }
     } catch (error) {

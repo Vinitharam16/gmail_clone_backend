@@ -119,9 +119,9 @@ async function GET_ALL_USERS(req, res, next) {
 }
 
 async function GET_USER_BYID(req, res, next) {
-  const { userId = "" } = req.params;
   try {
-    const USER = await Authmodel.findById(userId);
+    const USER = await Authmodel.findById({ _id: req.user}).select('-password -mailbox');
+    console.log(USER);
     if (USER._id) {
       return res.status(200).json({
         success: true,

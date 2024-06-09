@@ -30,6 +30,11 @@ const EmailSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    read: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     type:{
         type: String,
         required: true
