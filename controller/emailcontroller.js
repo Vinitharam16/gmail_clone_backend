@@ -83,9 +83,11 @@ const saveSentEmails = async (req, res) => {
         //get user and update email to its sentbox
 
         const user = await Authmodel.findOne({ _id: req.user });
-        console.log(user)
-        user.mails.sent.push(savedemail._id);
-        user.mails.inbox.push(savedEmailIn._id);
+        // sentmail = user.mails.sent.push(savedemail._id);
+        // receivedmail = user.mails.inbox.push(savedEmailIn._id);
+        await user.updateMany({},
+            { $push: { 'mails.inbox': 'savedEmailIn._id' }});
+        console.log(user);
 
     } catch (error) {
         console.log(error);
