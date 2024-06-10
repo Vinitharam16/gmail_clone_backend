@@ -9,13 +9,13 @@ const jwt = require('jsonwebtoken');
  */
 
 function TokenShield(req, res, next) {
-  const { token } = req.headers;
+  const  token  = req.headers.authorization;
   if (token) {
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
       if (decodedToken) {
         req.headers.decodedToken = decodedToken;
-        req.user = decodedToken.id;
+        req.user = decodedToken.uid;
         next();
       }
     } catch (error) {

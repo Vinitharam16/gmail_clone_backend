@@ -39,35 +39,53 @@ const saveSentEmails = async (req, res) => {
     try {
         const email = new Email(req.body);
 
-        const mailOptions = {
-            from: process.env.SMTP_USER,
-            to: email.to,
-            subject: email.subject,
-            text: email.body,
-        };
-        console.log(email, mailOptions);
+        // const mailOptions = {
+        //     from: process.env.SMTP_USER,
+        //     to: email.to,
+        //     subject: email.subject,
+        //     text: email.body,
+        // };
 
-        tranporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error("Error sending email: ", error);
-            } else {
-                console.log("Email sent: ", info.response);
-            }
+        // tranporter.sendMail(mailOptions, (error, info) => {
+        //     if (error) {
+        //         console.error("Error sending email: ", error);
+        //     } else {
+        //         console.log("Email sent: ", info.response);
+        //     }
+        // });
+        const savedemail = await email.save();
+        console.log('email sent')
+
+        //generate a random reply email
+        const newEmailIn = new Email({
+            from: email.to,
+            to: email.from,
+            subject: 'Re:' + email.subject,
+            body: 'This is a random reply mail',
+            date: new Date(),
+            image: '',
+            name: email.name,
+            starred: email.starred,
+            type: 'inbox'
         });
-        const savedemail = email.save();
+
+        //save random reply email
+        const savedEmailIn = await newEmailIn.save();
+        console.log('reply received')
 
         res.status(200).json({
             success: true,
             message: 'Email saved successfully',
-            data: savedemail
+            data: savedemail,
+            received: savedEmailIn
         });
 
         //get user and update email to its sentbox
 
         const user = await Authmodel.findOne({ _id: req.user });
-        console.log(req)
-        user.mails.sent.push(savedemail._id)
-        await user.save();
+        console.log(user)
+        user.mails.sent.push(savedemail._id);
+        user.mails.inbox.push(savedEmailIn._id);
 
     } catch (error) {
         console.log(error);

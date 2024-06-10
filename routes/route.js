@@ -7,19 +7,19 @@ const routes = require('express').Router();
 routes.get('/email',  GET_ALL_MAILS)
 
 // sent and save mails using post method
-routes.post('/save', saveSentEmails);
+routes.post('/save', TokenShield, saveSentEmails);
 // save draft mails using post method
-routes.post('/save-draft',  saveSentEmails);
+routes.post('/save-draft', TokenShield,  saveSentEmails);
 // get sent mails using get method
-routes.get('/emails/sent',  getsendMails);
+routes.get('/emails/sent', TokenShield,  getsendMails);
 // get mails from bin, starred and allmails using get method
 routes.get('/emails/:type', TokenShield, getEmails);
 // move emails to bin using post method
-routes.post('/bin',  moveEmailsToBin);
+routes.post('/bin', TokenShield,  moveEmailsToBin);
 // starred mails using post method
-routes.post('/starred',  toggleStarredEmails);
+routes.post('/starred', TokenShield,  toggleStarredEmails);
 // delete mails using delete method
-routes.delete('/delete',  deleteEmails);
+routes.delete('/delete', TokenShield,  deleteEmails);
 
 
 module.exports = routes;
