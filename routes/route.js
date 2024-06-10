@@ -7,13 +7,13 @@ const routes = require('express').Router();
 routes.get('/email',  GET_ALL_MAILS)
 
 // sent and save mails using post method
-routes.post('/save',  saveSentEmails);
+routes.post('/save', saveSentEmails);
 // save draft mails using post method
 routes.post('/save-draft',  saveSentEmails);
 // get sent mails using get method
 routes.get('/emails/sent',  getsendMails);
 // get mails from bin, starred and allmails using get method
-routes.get('/emails/:type',  getEmails);
+routes.get('/emails/:type', TokenShield, getEmails);
 // move emails to bin using post method
 routes.post('/bin',  moveEmailsToBin);
 // starred mails using post method
